@@ -54,7 +54,7 @@ The agent can take one of two discrete actions:
 
 ---
 
-## 🏆 Reward Function
+##  Reward Function
 
 The reward function encourages survival and successful navigation:
 
