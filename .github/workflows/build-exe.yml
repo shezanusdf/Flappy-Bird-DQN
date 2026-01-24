@@ -1,26 +1,20 @@
 name: Build Windows EXE
 
-
 on:
   workflow_dispatch:
-
 
 jobs:
   build:
     runs-on: windows-latest
 
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-
 
       - name: Set up Python 3.11
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-          cache: 'pip'
-
 
       - name: Install dependencies
         run: |
@@ -31,24 +25,20 @@ jobs:
           pip install pyyaml numpy matplotlib
           pip install pyinstaller
 
-
       - name: Verify installations
         run: |
           python -c "import torch; print(f'PyTorch: {torch.__version__}')"
           python -c "import gymnasium; print(f'Gymnasium: {gymnasium.__version__}')"
           python -c "import flappy_bird_gymnasium; print('Flappy Bird Gymnasium: OK')"
 
-
       - name: Build EXE with PyInstaller
         run: |
           pyinstaller --onefile --name FlappyBirdDQN --add-data "hyperparameters.yml;." --add-data "runs;runs" --hidden-import=flappy_bird_gymnasium --hidden-import=gymnasium.envs --hidden-import=torch --collect-all flappy_bird_gymnasium agent.py
-
 
       - name: Test EXE exists
         run: |
           dir dist
           if (Test-Path "dist/FlappyBirdDQN.exe") { Write-Host "SUCCESS: EXE built!" } else { exit 1 }
-
 
       - name: Upload EXE as artifact
         uses: actions/upload-artifact@v4
